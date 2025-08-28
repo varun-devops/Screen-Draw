@@ -9,15 +9,22 @@ A professional screen drawing tool that allows you to draw directly on your scre
 - Add text to your drawings
 - Clear drawings without exiting
 - Global hotkey activation (F9)
+- Option to start with Windows
+- Minimal resource usage
 
 ## Installation
 
-### Windows Installer
+### Windows Installer (Recommended)
 
-1. Download the latest installer from the [Releases](https://github.com/YourUsername/WebTroopScreenDraw/releases) page
-2. Run the installer and follow the instructions
-3. Launch WebtroopsScreen Draw from the Start menu or desktop shortcut
-4. Press F9 to activate drawing mode
+1. Download the latest installer from the [Releases](https://github.com/varun-devops/Screen-Draw/releases) page
+2. Run the `WebtroopsScreen Draw_Setup_1.0.0.exe` installer
+3. During installation, you can choose:
+   - Create desktop shortcut
+   - Create Start Menu shortcuts
+   - Start automatically with Windows
+   - Register the global hotkey (F9)
+4. Launch WebtroopsScreen Draw from the Start menu or desktop shortcut
+5. Press F9 to activate drawing mode
 
 ### From Source
 
@@ -56,6 +63,13 @@ pip install -r requirements.txt
 python build_installer.py
 ```
 
+## System Requirements
+
+- Windows 10/11
+- 4GB RAM (minimum)
+- 100MB disk space
+- Python 3.8+ (if running from source)
+
 ## Directory Structure
 
 ```
@@ -71,6 +85,7 @@ WebTroopScreenDraw/
 ├── requirements.txt    # Python dependencies
 ├── setup.py            # Package configuration
 ├── WebTroopScreenDraw.py  # Main entry point
+├── Output/             # Contains the built installer
 └── README.md           # This file
 ```
 
