@@ -392,24 +392,32 @@ def load_config():
         # Create default config
         with open(config_path, "w") as f:
             f.write('"""\nConfiguration file for WebTroopsScreen Draw\nThis file is generated during installation or first run.\n"""\n\n')
-            f.write('# Default hotkey configuration\nHOTKEY = "F9"\n')
+            f.write('# Default hotkey configuration\nHOTKEY = "Ctrl+Alt+W"\n')
             f.write('# Possible values: "F9", "Ctrl+Alt+D", "Ctrl+Alt+W", etc.\n\n')
             f.write('# Auto start setting\nAUTO_START = False\n')
-        print("Created default config file")
+        print("Created default config file with Ctrl+Alt+W hotkey")
     
     # Load the config module
     try:
-        # Dynamic import of the config module
-        spec = importlib.util.spec_from_file_location("config", config_path)
-        config = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(config)
-        hotkey = config.HOTKEY
-        print(f"Using hotkey from config: {hotkey}")
-        return hotkey
+        # Read the config file directly instead of importing
+        with open(config_path, "r") as f:
+            config_content = f.read()
+        
+        # Extract hotkey using a simple approach
+        if "HOTKEY =" in config_content:
+            for line in config_content.split("\n"):
+                if line.strip().startswith("HOTKEY ="):
+                    hotkey = line.split("=")[1].strip().strip('"\'')
+                    print(f"Using hotkey from config: {hotkey}")
+                    return hotkey
+        
+        # Default if not found in config
+        print("Hotkey not found in config, using default (Ctrl+Alt+W)")
+        return "Ctrl+Alt+W"
     except Exception as e:
         print(f"Error loading configuration: {e}")
-        print("Using default hotkey (F9)")
-        return "F9"
+        print("Using default hotkey (Ctrl+Alt+W)")
+        return "Ctrl+Alt+W"
 
 def parse_hotkey(hotkey_str):
     """Convert a user-friendly hotkey string to pynput format"""
@@ -437,9 +445,9 @@ def parse_hotkey(hotkey_str):
     if hotkey_str in mapping:
         return mapping[hotkey_str]
     
-    # Default to F9 if hotkey not recognized
-    print(f"Hotkey '{hotkey_str}' not recognized. Using default F9")
-    return ["<f9>", "f9"]
+    # Default to Ctrl+Alt+W if hotkey not recognized
+    print(f"Hotkey '{hotkey_str}' not recognized. Using default Ctrl+Alt+W")
+    return ["<ctrl>+<alt>+w"]
 
 def main():
     # Load user configuration
