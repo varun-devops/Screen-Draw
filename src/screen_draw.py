@@ -5,6 +5,8 @@ from PIL import ImageGrab
 import threading
 import ctypes  # For getting accurate screen dimensions
 import os
+import importlib.util
+import sys
 
 # Global variables
 drawing = False
@@ -381,9 +383,71 @@ def test_drawing():
     print("Testing drawing mode...")
     on_hotkey()
 
+def load_config():
+    """Load hotkey configuration from config file or create default config"""
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.py")
+    
+    # Check if config file exists
+    if not os.path.exists(config_path):
+        # Create default config
+        with open(config_path, "w") as f:
+            f.write('"""\nConfiguration file for WebTroopsScreen Draw\nThis file is generated during installation or first run.\n"""\n\n')
+            f.write('# Default hotkey configuration\nHOTKEY = "F9"\n')
+            f.write('# Possible values: "F9", "Ctrl+Alt+D", "Ctrl+Alt+W", etc.\n\n')
+            f.write('# Auto start setting\nAUTO_START = False\n')
+        print("Created default config file")
+    
+    # Load the config module
+    try:
+        # Dynamic import of the config module
+        spec = importlib.util.spec_from_file_location("config", config_path)
+        config = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(config)
+        hotkey = config.HOTKEY
+        print(f"Using hotkey from config: {hotkey}")
+        return hotkey
+    except Exception as e:
+        print(f"Error loading configuration: {e}")
+        print("Using default hotkey (F9)")
+        return "F9"
+
+def parse_hotkey(hotkey_str):
+    """Convert a user-friendly hotkey string to pynput format"""
+    mapping = {
+        "F9": ["<f9>", "f9"],
+        "F1": ["<f1>", "f1"],
+        "F2": ["<f2>", "f2"],
+        "F3": ["<f3>", "f3"],
+        "F4": ["<f4>", "f4"],
+        "F5": ["<f5>", "f5"],
+        "F6": ["<f6>", "f6"],
+        "F7": ["<f7>", "f7"],
+        "F8": ["<f8>", "f8"],
+        "F10": ["<f10>", "f10"],
+        "F11": ["<f11>", "f11"],
+        "F12": ["<f12>", "f12"],
+        "Ctrl+Alt+D": ["<ctrl>+<alt>+d"],
+        "Ctrl+Alt+W": ["<ctrl>+<alt>+w"],
+        "Ctrl+Alt+S": ["<ctrl>+<alt>+s"],
+        "Alt+Z": ["<alt>+z"],
+        "Alt+X": ["<alt>+x"],
+        "Alt+C": ["<alt>+c"],
+    }
+    
+    if hotkey_str in mapping:
+        return mapping[hotkey_str]
+    
+    # Default to F9 if hotkey not recognized
+    print(f"Hotkey '{hotkey_str}' not recognized. Using default F9")
+    return ["<f9>", "f9"]
+
 def main():
+    # Load user configuration
+    user_hotkey = load_config()
+    hotkey_formats = parse_hotkey(user_hotkey)
+    
     print("WebtroopsScreen Draw Tool started")
-    print("Press F9 to start/stop drawing")
+    print(f"Press {user_hotkey} to start/stop drawing")
     print("Instructions:")
     print("- Click and drag to draw on the screen")
     print("- Use color buttons at the top to change drawing color")
@@ -391,12 +455,10 @@ def main():
     print("- Press the RESET button in top-right corner to clear drawings")
     print("- Press ESC to exit drawing mode")
     
-    # Try both '<f9>' and 'f9' formats for better compatibility
-    hotkey_combinations = {
-        '<f9>': on_hotkey,
-        'f9': on_hotkey,  # Alternative format
-        '<alt>+d': on_hotkey  # Backup hotkey
-    }
+    # Set up hotkey combinations
+    hotkey_combinations = {}
+    for key_format in hotkey_formats:
+        hotkey_combinations[key_format] = on_hotkey
     
     # Set up the hotkey listener
     try:

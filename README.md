@@ -22,9 +22,9 @@ A professional screen drawing tool that allows you to draw directly on your scre
    - Create desktop shortcut
    - Create Start Menu shortcuts
    - Start automatically with Windows
-   - Register the global hotkey (F9)
+   - Select your preferred hotkey (F9, Ctrl+Alt+W, etc.)
 4. Launch WebtroopsScreen Draw from the Start menu or desktop shortcut
-5. Press F9 to activate drawing mode
+5. Press your chosen hotkey to activate drawing mode
 
 ### From Source
 
@@ -95,4 +95,4 @@ MIT License - See LICENSE file for details.
 
 ## Credits
 
-Developed by WebTroop
+Developed by Webtroops
