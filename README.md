@@ -1,6 +1,26 @@
-# WebtroopsScreen Draw
+# Screen Draw Application
 
-A professional screen drawing tool that allows you to draw directly on your screen with hotkeys.
+A tool for drawing on your screen during presentations or for annotations.
+
+## Installation
+
+1. Download the latest release from the GitHub releases page
+2. Extract the ZIP file
+3. Run `ScreenDraw.exe`
+
+## Usage
+
+- Press `Ctrl+Shift+D` (default) to activate drawing mode
+- Draw on your screen using your mouse
+- Press `Esc` to exit drawing mode
+
+## Configuration
+
+The application creates a configuration file in the `config` directory. You can modify the hotkey by editing `config/config.py`.
+
+## Troubleshooting
+
+If you encounter issues with configuration files, try running the application as administrator or ensure you have write permissions to the application directory.
 
 ## Features
 

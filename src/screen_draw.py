@@ -7,6 +7,7 @@ import ctypes  # For getting accurate screen dimensions
 import os
 import importlib.util
 import sys
+import re  # For regular expression matching
 
 # Global variables
 drawing = False
@@ -384,40 +385,39 @@ def test_drawing():
     on_hotkey()
 
 def load_config():
-    """Load hotkey configuration from config file or create default config"""
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.py")
+    """Load configuration from the config file or create a default one if it doesn't exist."""
+    # Use a platform-independent location for configuration
+    if getattr(sys, 'frozen', False):
+        # Running as packaged executable
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        # Running as script
+        base_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # Check if config file exists
-    if not os.path.exists(config_path):
-        # Create default config
-        with open(config_path, "w") as f:
-            f.write('"""\nConfiguration file for WebTroopsScreen Draw\nThis file is generated during installation or first run.\n"""\n\n')
-            f.write('# Default hotkey configuration\nHOTKEY = "Ctrl+Alt+W"\n')
-            f.write('# Possible values: "F9", "Ctrl+Alt+D", "Ctrl+Alt+W", etc.\n\n')
-            f.write('# Auto start setting\nAUTO_START = False\n')
-        print("Created default config file with Ctrl+Alt+W hotkey")
+    # Create config directory in user's appdata to ensure write permissions
+    config_dir = os.path.join(os.path.expanduser('~'), 'ScreenDraw')
+    os.makedirs(config_dir, exist_ok=True)
     
-    # Load the config module
+    config_path = os.path.join(config_dir, 'config.ini')
+    
+    # Default hotkey configuration
+    default_hotkey = "ctrl+shift+d"
+    
     try:
-        # Read the config file directly instead of importing
-        with open(config_path, "r") as f:
-            config_content = f.read()
+        if os.path.exists(config_path):
+            with open(config_path, "r") as f:
+                config_content = f.read()
+                match = re.search(r'hotkey\s*=\s*[\'"]([^\'"]*)[\'"]', config_content)
+                if match:
+                    return match.group(1)
         
-        # Extract hotkey using a simple approach
-        if "HOTKEY =" in config_content:
-            for line in config_content.split("\n"):
-                if line.strip().startswith("HOTKEY ="):
-                    hotkey = line.split("=")[1].strip().strip('"\'')
-                    print(f"Using hotkey from config: {hotkey}")
-                    return hotkey
-        
-        # Default if not found in config
-        print("Hotkey not found in config, using default (Ctrl+Alt+W)")
-        return "Ctrl+Alt+W"
+        # If config doesn't exist or is invalid, create a new one
+        with open(config_path, "w") as f:
+            f.write(f'hotkey = "{default_hotkey}"\n')
+        return default_hotkey
     except Exception as e:
-        print(f"Error loading configuration: {e}")
-        print("Using default hotkey (Ctrl+Alt+W)")
-        return "Ctrl+Alt+W"
+        print(f"Config error: {e}")
+        return default_hotkey
 
 def parse_hotkey(hotkey_str):
     """Convert a user-friendly hotkey string to pynput format"""

@@ -6,7 +6,7 @@ setup(
     description="A professional screen drawing tool",
     author="WebTroop",
     author_email="contact@webtroop.com",
-    url="https://github.com/YourUsername/WebTroopScreenDraw",
+    url="https://github.com/varun-devops/WebTroopScreenDraw",
     packages=find_packages(),
     package_data={
         'assets': ['*.ico'],
