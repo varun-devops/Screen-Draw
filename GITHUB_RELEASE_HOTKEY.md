@@ -9,8 +9,8 @@
 3. Click "Create a new release"
 
 4. Fill in the following details:
-   - Tag version: `v1.0.1`
-   - Release title: `WebtroopsScreen Draw v1.0.1 - Customizable Hotkey`
+   - Tag version: `v2.0.0`
+   - Release title: `WebtroopsScreen Draw v2.0.0 - Customizable Hotkey`
    - Description: Use the template below
 
 5. Upload the executable file:
@@ -21,7 +21,7 @@
 ## Release Description Template
 
 ```
-# WebtroopsScreen Draw v1.0.1
+# WebtroopsScreen Draw v2.0.0
 
 This release adds the ability to choose your preferred hotkey during installation.
 

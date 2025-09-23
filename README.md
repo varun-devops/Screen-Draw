@@ -16,11 +16,14 @@ A tool for drawing on your screen during presentations or for annotations.
 
 ## Configuration
 
-The application creates a configuration file in the `config` directory. You can modify the hotkey by editing `config/config.py`.
+The application creates a configuration file in your home directory at `~/ScreenDraw/config.ini`. You can modify the hotkey by editing this file.
 
 ## Troubleshooting
 
-If you encounter issues with configuration files, try running the application as administrator or ensure you have write permissions to the application directory.
+If you encounter any issues:
+1. Check that the configuration file exists at `~/ScreenDraw/config.ini`
+2. Ensure your user account has write permissions to your home directory
+3. If problems persist, try running the application as administrator
 
 ## Features
 

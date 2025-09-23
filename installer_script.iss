@@ -1,12 +1,12 @@
 
 #define MyAppName "WebtroopsScreen Draw"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "WebTroop"
 #define MyAppURL "https://github.com/varun-devops/Screen-Draw"
 #define MyAppExeName "WebtroopsScreen Draw.exe"
 
 [Setup]
-AppId={{F9D7B4E0-8C36-4F3A-B1B8-E9F8E9E9E9E9}}
+AppId={F9D7B4E0-8C36-4F3A-B1B8-E9F8E9E9E9E9}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
@@ -107,29 +107,24 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var
-  SelectedHotkey, ConfigFilePath, ConfigContent: string;
+  SelectedHotkey, ConfigPath, ConfigContent: string;
 begin
   if CurStep = ssPostInstall then
   begin
     // Get the selected hotkey
     SelectedHotkey := GetSelectedHotkey('');
     
-    // Create or update config file
-    ConfigFilePath := ExpandConstant('{app}\src\config.py');
-    
-    // Create config content
+    // Create user's config directory
+    ConfigPath := ExpandConstant('{userappdata}\ScreenDraw');
+    if not DirExists(ConfigPath) then
+      CreateDir(ConfigPath);
+      
+    // Create config file
     ConfigContent := '"""' + #13#10 + 'Configuration file for WebTroopsScreen Draw' + #13#10 + 
                      'This file is generated during installation.' + #13#10 + '"""' + #13#10 + #13#10 + 
-                     '# Hotkey configuration' + #13#10 + 
-                     'HOTKEY = "' + SelectedHotkey + '"' + #13#10 + #13#10 + 
-                     '# Auto start setting' + #13#10;
-    
-    if WizardIsTaskSelected('startupicon') then
-      ConfigContent := ConfigContent + 'AUTO_START = True' + #13#10
-    else
-      ConfigContent := ConfigContent + 'AUTO_START = False' + #13#10;
+                     'hotkey = "' + SelectedHotkey + '"' + #13#10;
     
     // Write config file
-    SaveStringToFile(ConfigFilePath, ConfigContent, False);
+    SaveStringToFile(ConfigPath + '\config.ini', ConfigContent, False);
   end;
 end;

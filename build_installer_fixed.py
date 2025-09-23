@@ -17,7 +17,7 @@ from pathlib import Path
 
 # Configuration
 APP_NAME = "WebtroopsScreen Draw"
-APP_VERSION = "1.0.0"
+APP_VERSION = "2.0.0"
 MAIN_SCRIPT = "WebTroopScreenDraw.py"
 ICON_FILE = "assets/icon.ico"
 OUTPUT_DIR = "dist"
@@ -167,14 +167,19 @@ begin
     // Get the selected hotkey
     SelectedHotkey := GetSelectedHotkey('');
     
+    // Create user's home directory config folder
+    ConfigDirPath := ExpandConstant('{{userappdata}}\\ScreenDraw');
+    if not DirExists(ConfigDirPath) then
+      CreateDir(ConfigDirPath);
+    
     // Create or update config file
-    ConfigFilePath := ExpandConstant('{{app}}\\src\\config.py');
+    ConfigFilePath := ExpandConstant('{{userappdata}}\\ScreenDraw\\config.ini');
     
     // Create config content
     ConfigContent := '"""' + #13#10 + 'Configuration file for WebTroopsScreen Draw' + #13#10 + 
                      'This file is generated during installation.' + #13#10 + '"""' + #13#10 + #13#10 + 
                      '# Hotkey configuration' + #13#10 + 
-                     'HOTKEY = "' + SelectedHotkey + '"' + #13#10 + #13#10 + 
+                     'hotkey = "' + SelectedHotkey + '"' + #13#10 + #13#10 + 
                      '# Auto start setting' + #13#10;
     
     if WizardIsTaskSelected('startupicon') then
